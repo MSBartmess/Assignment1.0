@@ -4,10 +4,17 @@ public class ChessBoard {
     //Holds array list of players
     private ArrayList<Player> players;
     private int currentPlayer;
-
-    //Methods:
+    static int X_RANGE_LOWER = 0;
+    static int X_RANGE_UPPER = 8;
+    static int Y_RANGE_LOWER = 0;
+    static int Y_RANGE_UPPER = 8;
+    //Methods
     public ChessBoard(){
-
+        this.players = new ArrayList<>();
+        this.players.add(new Player(this,1));
+        this.players.add(new Player(this,-1));
+        this.currentPlayer = 0;
+        setUp();
     }
 
     public void setUp(){
@@ -50,5 +57,13 @@ public class ChessBoard {
         return null;
     }
 
+    public boolean isLocEmpty(Location loc){
+        for(Player player : players){
+            if(player.pieceAt(loc)!=null){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

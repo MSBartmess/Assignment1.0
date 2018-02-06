@@ -34,21 +34,31 @@ public class GamePieceTest {
     }
     @Test
     public void pawnPlayer1CanMoveTest(){
-        Pawn testPawn = new Pawn(board, player0, new Location(4,5));
+        Pawn testPawn = new Pawn(board, player1, new Location(4,5));
         assertTrue(testPawn.canMoveTo(new Location(4,4)));
-        assertFalse(testPawn.canMoveTo(new Location(4,3)));
+        assertFalse(testPawn.canMoveTo(new Location(4,6)));
     }
     @Test
     public void pawnPlayer0MoveTest(){
         Pawn testPawn = new Pawn(board, player0, new Location(6,2));
-        testPawn.moveTo(new Location(6,3));
-        assertEquals(testPawn, board.pieceAt(new Location(6,3)));
+        player0.addPiece(testPawn);
+        try {
+            testPawn.moveTo(new Location(6, 3));
+            assertEquals(testPawn, board.pieceAt(new Location(6, 3)));
+        } catch (InvalidMoveException e) {
+            fail("Move was not declared valid");
+        }
     }
     @Test
     public void pawnPlayer1MoveTest(){
         Pawn testPawn = new Pawn(board, player1, new Location(4,5));
-        testPawn.moveTo(new Location(4,4));
-        assertEquals(testPawn, board.pieceAt(new Location(4,4)));
+        player1.addPiece(testPawn);
+        try{
+            testPawn.moveTo(new Location(4,4));
+            assertEquals(testPawn, board.pieceAt(new Location(4,4)));
+        } catch (InvalidMoveException e) {
+            fail("Move was not declared valid");
+        }
     }
 
 

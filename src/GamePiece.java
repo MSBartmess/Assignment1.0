@@ -4,10 +4,26 @@ public abstract class GamePiece {
     protected Player player;
 
     abstract boolean canMoveTo(Location dest);
-    abstract void moveTo(Location dest);
-    abstract boolean equals(GamePiece piece);
-    abstract Location getLoc();
-    abstract boolean isAt(Location checkLoc);
+    abstract void moveTo(Location dest) throws InvalidMoveException;
+
+    public boolean equals(GamePiece piece){
+        return board == piece.getBoard() && player == piece.getPlayer() && loc.equals(piece.loc);
+    }
+    public Location getLoc(){
+        return loc;
+    }
+    public boolean isAt(Location checkLoc){
+        return loc.equals(checkLoc);
+    }
+    public Player getPlayer(){
+        return player;
+    }
+    public ChessBoard getBoard(){
+        return board;
+    }
+    public boolean isOtherPlayerPiece(Location checkLoc){
+         return (!board.isLocEmpty(checkLoc)) && !(board.pieceAt(checkLoc).getPlayer().equals(this.player));
+    }
 }
 
 class Pawn extends GamePiece {
@@ -22,27 +38,40 @@ class Pawn extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
+        if(dest == null || !dest.isValidLocation(this.board)){
+            return false;
+        }
+        //Moving forward two spaces
+
+        if(isFirstMove && dest.getX() == loc.getX() && (dest.getY() == loc.getY() + (2 * this.player.getDirModifier()))  && board.isLocEmpty(dest)){
+            return true;
+        }
+        //Moving forward 1 space
+        if(dest.getX() == loc.getX() && dest.getY() == (loc.getY() + this.player.getDirModifier()) && board.isLocEmpty(dest)){
+            return true;
+        }
+        //Pawns can move diagonally to take a peice
+        if(dest.getY() == (loc.getY() + this.player.getDirModifier()) &&
+                ((dest.getX() == (this.loc.getX() + 1)) || (dest.getX() == (this.loc.getX() - 1))) && isOtherPlayerPiece(dest)){
+                return true;
+        }
+
         return false;
     }
 
     @Override
-    void moveTo(Location dest) {
-
-    }
-
-    @Override
-    boolean equals(GamePiece piece) {
-        return false;
-    }
-
-    @Override
-    Location getLoc() {
-        return null;
-    }
-
-    @Override
-    boolean isAt(Location checkLoc) {
-        return false;
+    public void moveTo(Location dest) throws InvalidMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new InvalidMoveException("Pawn can not be moved to location");
+        }
     }
 }
 
@@ -66,18 +95,4 @@ class Rook extends GamePiece {
 
     }
 
-    @Override
-    boolean equals(GamePiece piece) {
-        return false;
-    }
-
-    @Override
-    Location getLoc() {
-        return null;
-    }
-
-    @Override
-    boolean isAt(Location checkLoc) {
-        return false;
-    }
 }

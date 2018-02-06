@@ -15,6 +15,24 @@ public class Player {
         return  playerDirectionModifier;
     }
 
+    public GamePiece pieceAt(Location loc){
+        for(GamePiece piece : pieces){
+            if(piece.isAt(loc)){
+                return piece;
+            }
+        }
+        return null;
+    }
 
+    public void removePieceAt(Location loc){
+
+    }
+
+    public void removePiece(GamePiece piece){
+
+    }
+    public void addPiece(GamePiece piece){
+        pieces.add(piece);
+    }
 
 }
