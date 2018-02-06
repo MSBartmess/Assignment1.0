@@ -49,14 +49,14 @@ public class ChessBoardTest {
     @Test
     public void getCurrentPlayerTest(){
         ChessBoard board = new ChessBoard();
-        assertEquals(0,board.getCurrentPlayer());
+        assertEquals(0,board.getCurrentPlayerNum());
     }
 
     @Test
     public void getSecondCurrentPlayerTest(){
         ChessBoard board = new ChessBoard();
         board.movePiece(new Location(0,1),new Location(0,2));
-        assertEquals(1,board.getCurrentPlayer());
+        assertEquals(1,board.getCurrentPlayerNum());
     }
 
     @Test
@@ -64,6 +64,6 @@ public class ChessBoardTest {
         ChessBoard board = new ChessBoard();
         board.movePiece(new Location(0,1),new Location(0,2));
         board.movePiece(new Location(7,7),new Location(7,6));
-        assertEquals(0,board.getCurrentPlayer());
+        assertEquals(0,board.getCurrentPlayerNum());
     }
 }
