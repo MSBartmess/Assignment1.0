@@ -83,4 +83,21 @@ public class ChessBoardTest {
 
         assertEquals(0,board.getCurrentPlayerNum());
     }
+
+    @Test
+    public void isInCheckTest(){
+        ChessBoard board = new ChessBoard();
+        try {
+            board.movePiece(new Location(2,1),new Location(2,3));
+            board.movePiece(new Location(4,6),new Location(4,5));
+            board.movePiece(new Location(0,1),new Location(0,2));
+            assertFalse(board.isCurrentPlayerInCheck());
+            board.movePiece(new Location(5,7),new Location(1,3));
+            assertTrue(board.isCurrentPlayerInCheck());
+
+        } catch (IllegalMoveException e) {
+            fail("Move was declared illegal");
+        }
+
+    }
 }

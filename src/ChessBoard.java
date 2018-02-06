@@ -97,4 +97,26 @@ public class ChessBoard {
         return true;
     }
 
+    public boolean isCurrentPlayerInCheck(){
+        for(Player player : players){
+            if(player != getCurrentPlayer()){
+                if(getCurrentPlayer().isInCheckFrom(player)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isCurrentPlayerInCheckMate(){
+        for(Player player : players){
+            if(player != getCurrentPlayer()){
+                if(getCurrentPlayer().isInCheckFrom(player)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

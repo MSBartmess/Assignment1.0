@@ -30,6 +30,7 @@ public class GamePieceTest {
         Pawn testPawn = new Pawn(board, player0, new Location(6,2));
         assertTrue(testPawn.canMoveTo(new Location(6,3)));
         assertFalse(testPawn.canMoveTo(new Location(7,3)));
+        ssertFalse(testPawn.canMoveTo(new Location(6,2)));
     }
     @Test
     public void pawnPlayer1CanMoveTest(){
@@ -70,6 +71,7 @@ public class GamePieceTest {
         assertTrue(testRook.canMoveTo(new Location(7,2)));
         assertFalse(testRook.canMoveTo(new Location(7,3)));
         assertFalse(testRook.canMoveTo(new Location(2,5)));
+        assertFalse(testRook.canMoveTo(new Location(6,2)));
     }
 
     @Test
@@ -89,10 +91,10 @@ public class GamePieceTest {
         player0.addPiece(testRook);
         Pawn testPawn0 = new Pawn(board,player0, new Location(2,2));
         player0.addPiece(testPawn0);
-        Pawn testPawn1 = new Pawn(board,player1, new Location(6,5));
-        player1.addPiece(testPawn1);
-        assertTrue(testRook.canMoveTo(new Location(0,2)));
-        assertTrue(testRook.canMoveTo(new Location(6,6)));
+        Pawn testPawn1 = new Pawn(board,player0, new Location(6,5));
+        player0.addPiece(testPawn1);
+        assertFalse(testRook.canMoveTo(new Location(1,2)));
+        assertFalse(testRook.canMoveTo(new Location(6,5)));
     }
 
     @Test

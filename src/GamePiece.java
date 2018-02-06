@@ -21,6 +21,9 @@ public abstract class GamePiece {
     public ChessBoard getBoard(){
         return board;
     }
+    public boolean canCapture(Location capLoc){
+        return canMoveTo(capLoc);
+    }
     public boolean isOtherPlayerPiece(Location checkLoc){
          return (!board.isLocEmpty(checkLoc)) && !(board.pieceAt(checkLoc).getPlayer().equals(this.player));
     }
@@ -54,6 +57,20 @@ class Pawn extends GamePiece {
         if(dest.getY() == (loc.getY() + this.player.getDirModifier()) &&
                 ((dest.getX() == (this.loc.getX() + 1)) || (dest.getX() == (this.loc.getX() - 1))) && isOtherPlayerPiece(dest)){
                 return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean canCapture(Location dest){
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
+            return false;
+        }
+        //Pawns can move diagonally to take a peice
+        if(dest.getY() == (loc.getY() + this.player.getDirModifier()) &&
+                ((dest.getX() == (this.loc.getX() + 1)) || (dest.getX() == (this.loc.getX() - 1))) && isOtherPlayerPiece(dest)){
+            return true;
         }
 
         return false;
@@ -99,11 +116,14 @@ class Rook extends GamePiece {
         int yDist = dest.getY() - loc.getY();
         int ySign = yDist > 0 ? 1 : -1;
         //Check for collision before hand
-        for(int i = 1; i <= Math.abs(xDist); i++){
-            for(int j = 1; j <= Math.abs(yDist); j++){
+        for(int i = 0; i <= Math.abs(xDist); i++){
+            for(int j = 0; j <= Math.abs(yDist); j++){
+                if(i==0 && j==0){
+                    continue;
+                }
                 int tempX = loc.getX()+i*xSign;
                 int tempY = loc.getY()+j*ySign;
-                if(!board.isLocEmpty(new Location(tempX, tempY)) && (tempX != dest.getX() && tempY != dest.getY())){
+                if(!board.isLocEmpty(new Location(tempX, tempY)) && !(tempX == dest.getX() && tempY == dest.getY())){
                     return false;
                 }
             }

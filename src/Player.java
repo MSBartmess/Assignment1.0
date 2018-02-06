@@ -4,6 +4,7 @@ public class Player {
     protected ChessBoard board;
     protected ArrayList<GamePiece> pieces;
     protected int playerDirectionModifier;
+    protected King kingPiece;
 
     public Player(ChessBoard board){
         this.board = board;
@@ -33,11 +34,23 @@ public class Player {
         pieces.add(piece);
     }
 
+    public ArrayList<GamePiece> getPieces() {
+        return pieces;
+    }
+
     public void setUp(){
 
     }
     public void tearDown(){
         pieces.clear();
+    }
+    public boolean isInCheckFrom(Player opponent){
+        for(GamePiece piece : opponent.getPieces()){
+            if(piece.canCapture(kingPiece.getLoc())){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

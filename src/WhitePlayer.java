@@ -16,7 +16,8 @@ public class WhitePlayer extends Player{
         pieces.add(new Knight(this.board, this, new Location(6,0)));
         pieces.add(new Bishop(this.board, this, new Location(2,0)));
         pieces.add(new Bishop(this.board, this, new Location(5,0)));
-        pieces.add(new King(this.board, this, new Location(4,0)));
         pieces.add(new Queen(this.board, this, new Location(3,0)));
+        kingPiece = new King(this.board, this, new Location(4,0));
+        pieces.add(kingPiece);
     }
 }
