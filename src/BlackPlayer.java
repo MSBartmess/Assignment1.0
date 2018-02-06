@@ -1,7 +1,7 @@
 public class BlackPlayer extends Player{
     public BlackPlayer(ChessBoard board){
         super(board);
-        playerDirectionModifier = 1;
+        playerDirectionModifier = -1;
     }
     @Override
     public void setUp() {

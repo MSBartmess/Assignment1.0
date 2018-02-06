@@ -24,11 +24,13 @@ public class ChessBoard {
     }
 
     public void tearDown(){
-
+        for(Player player : players){
+            player.tearDown();
+        }
     }
 
     public int getCurrentPlayerNum(){
-        return 0;
+        return currentPlayer;
     }
 
     public Player getCurrentPlayer(){
@@ -55,6 +57,8 @@ public class ChessBoard {
         if(piece.getPlayer() == getCurrentPlayer()){
             piece.moveTo(destLoc);
         }
+        currentPlayer++;
+        currentPlayer %= players.size();
     }
 
     public boolean canMovePiece(Location pieceLoc, Location destLoc){

@@ -38,7 +38,7 @@ class Pawn extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
-        if(dest == null || !dest.isValidLocation(this.board)){
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
             return false;
         }
         //Moving forward two spaces
@@ -68,6 +68,7 @@ class Pawn extends GamePiece {
                 takenPiece.getPlayer().removePiece(takenPiece);
             }
             this.loc.setLoc(dest);
+            isFirstMove = false;
         }
         else{
             throw new IllegalMoveException("Pawn can not be moved to location");
@@ -85,17 +86,52 @@ class Rook extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
-        return false;
+        //Check if destination is valid
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
+            return false;
+        }
+        //Check if destination is on the same row
+        if(dest.getX() != loc.getX() && dest.getY() != loc.getY()){
+            return false;
+        }
+        int xDist = dest.getX() - loc.getX();
+        int xSign = xDist > 0 ? 1 : -1;
+        int yDist = dest.getY() - loc.getY();
+        int ySign = yDist > 0 ? 1 : -1;
+        //Check for collision before hand
+        for(int i = 1; i <= Math.abs(xDist); i++){
+            for(int j = 1; j <= Math.abs(yDist); j++){
+                int tempX = loc.getX()+i*xSign;
+                int tempY = loc.getY()+j*ySign;
+                if(!board.isLocEmpty(new Location(tempX, tempY)) && (tempX != dest.getX() && tempY != dest.getY())){
+                    return false;
+                }
+            }
+        }
+        if(!board.isLocEmpty(dest) && !isOtherPlayerPiece(dest)){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    void moveTo(Location dest) {
-
+    void moveTo(Location dest) throws IllegalMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new IllegalMoveException("Rook can not be moved to location");
+        }
     }
 
 }
 
-class Knight extends GamePiece {
+class Knight extends GamePiece{
 
     public Knight(ChessBoard board, Player player, Location loc){
         this.board = board;
@@ -105,12 +141,35 @@ class Knight extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
+            return false;
+        }
+        if(dest.getX() == loc.getX() + 2 || dest.getX() == loc.getX() - 2){
+            if(dest.getY() == loc.getY() + 1 || dest.getY() == loc.getY() - 1){
+                return isOtherPlayerPiece(dest) || board.isLocEmpty(dest);
+            }
+        }
+        if(dest.getY() == loc.getY() + 2 || dest.getY() == loc.getY() - 2){
+            if(dest.getX() == loc.getX() + 1 || dest.getX() == loc.getX() - 1){
+                return isOtherPlayerPiece(dest) || board.isLocEmpty(dest);
+            }
+        }
         return false;
     }
 
     @Override
-    void moveTo(Location dest) {
-
+    void moveTo(Location dest) throws IllegalMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new IllegalMoveException("Knight can not be moved to location");
+        }
     }
 }
 
@@ -124,12 +183,41 @@ class Bishop extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
-        return false;
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
+            return false;
+        }
+        //Check Diagonal
+        int xDist = dest.getX() - loc.getX();
+        int xSign = xDist > 0 ? 1 : -1;
+        int yDist = dest.getY() - loc.getY();
+        int ySign = yDist > 0 ? 1 : -1;
+        if(Math.abs(xDist)!=Math.abs(yDist)){
+            return false;
+        }
+        //Check for collision
+        for(int i = 1; i<Math.abs(xDist)-1; i++){
+            int tempX = loc.getX() + i*xSign;
+            int tempY = loc.getY() + i*ySign;
+            if(!board.isLocEmpty(new Location(tempX, tempY))){
+                return false;
+            }
+        }
+        return isOtherPlayerPiece(dest) || board.isLocEmpty(dest);
     }
 
     @Override
-    void moveTo(Location dest) {
-
+    void moveTo(Location dest) throws IllegalMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new IllegalMoveException("Bishop can not be moved to location");
+        }
     }
 }
 
@@ -142,12 +230,28 @@ class King extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)){
+            return false;
+        }
+        if(Math.abs(dest.getX()-loc.getX())<=1 && Math.abs(dest.getY()-loc.getY())<=1){
+            return isOtherPlayerPiece(dest) || board.isLocEmpty(dest);
+        }
         return false;
     }
 
     @Override
-    void moveTo(Location dest) {
-
+    void moveTo(Location dest) throws IllegalMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new IllegalMoveException("King can not be moved to location");
+        }
     }
 }
 
@@ -160,11 +264,67 @@ class Queen extends GamePiece {
 
     @Override
     public boolean canMoveTo(Location dest){
-        return false;
+        if(dest == null || !dest.isValidLocation(this.board) || loc.equals(dest)) {
+            return false;
+        }
+        return isLegalDiagonal(dest) || isLegalInLine(dest);
     }
 
     @Override
-    void moveTo(Location dest) {
-
+    void moveTo(Location dest) throws IllegalMoveException{
+        if(canMoveTo(dest)){
+            //Handle Capture
+            if(isOtherPlayerPiece(dest)){
+                GamePiece takenPiece = board.pieceAt(dest);
+                takenPiece.getPlayer().removePiece(takenPiece);
+            }
+            this.loc.setLoc(dest);
+        }
+        else{
+            throw new IllegalMoveException("Queen can not be moved to location");
+        }
+    }
+    private boolean isLegalDiagonal(Location dest){
+        //Check Diagonal
+        int xDist = dest.getX() - loc.getX();
+        int xSign = xDist > 0 ? 1 : -1;
+        int yDist = dest.getY() - loc.getY();
+        int ySign = yDist > 0 ? 1 : -1;
+        if(Math.abs(xDist)!=Math.abs(yDist)){
+            return false;
+        }
+        //Check for collision
+        for(int i = 1; i<Math.abs(xDist)-1; i++){
+            int tempX = loc.getX() + i*xSign;
+            int tempY = loc.getY() + i*ySign;
+            if(!board.isLocEmpty(new Location(tempX, tempY))){
+                return false;
+            }
+        }
+        return isOtherPlayerPiece(dest) || board.isLocEmpty(dest);
+    }
+    private boolean isLegalInLine(Location dest){
+        //Check if destination is on the same row
+        if(dest.getX() != loc.getX() && dest.getY() != loc.getY()){
+            return false;
+        }
+        int xDist = dest.getX() - loc.getX();
+        int xSign = xDist > 0 ? 1 : -1;
+        int yDist = dest.getY() - loc.getY();
+        int ySign = yDist > 0 ? 1 : -1;
+        //Check for collision before hand
+        for(int i = 1; i <= Math.abs(xDist); i++){
+            for(int j = 1; j <= Math.abs(yDist); j++){
+                int tempX = loc.getX()+i*xSign;
+                int tempY = loc.getY()+j*ySign;
+                if(!board.isLocEmpty(new Location(tempX, tempY)) && (tempX != dest.getX() && tempY != dest.getY())){
+                    return false;
+                }
+            }
+        }
+        if(!board.isLocEmpty(dest) && !isOtherPlayerPiece(dest)){
+            return false;
+        }
+        return true;
     }
 }

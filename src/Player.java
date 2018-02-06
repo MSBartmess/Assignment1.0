@@ -23,12 +23,11 @@ public class Player {
         return null;
     }
 
-    public void removePieceAt(Location loc){
-
-    }
-
     public void removePiece(GamePiece piece){
-
+        pieces.remove(piece);
+    }
+    public int getRemainingPiecesNum(){
+        return pieces.size();
     }
     public void addPiece(GamePiece piece){
         pieces.add(piece);
@@ -36,6 +35,9 @@ public class Player {
 
     public void setUp(){
 
+    }
+    public void tearDown(){
+        pieces.clear();
     }
 }
 

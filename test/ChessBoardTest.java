@@ -76,7 +76,7 @@ public class ChessBoardTest {
         ChessBoard board = new ChessBoard();
         try {
             board.movePiece(new Location(0,1),new Location(0,2));
-            board.movePiece(new Location(7,7),new Location(7,6));
+            board.movePiece(new Location(7,6),new Location(7,5));
         } catch (IllegalMoveException e) {
             fail("Move was declared illegal");
         }
