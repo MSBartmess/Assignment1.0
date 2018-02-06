@@ -4,7 +4,7 @@ public abstract class GamePiece {
     protected Player player;
 
     abstract boolean canMoveTo(Location dest);
-    abstract void moveTo(Location dest) throws InvalidMoveException;
+    abstract void moveTo(Location dest) throws IllegalMoveException;
 
     public boolean equals(GamePiece piece){
         return board == piece.getBoard() && player == piece.getPlayer() && loc.equals(piece.loc);
@@ -60,7 +60,7 @@ class Pawn extends GamePiece {
     }
 
     @Override
-    public void moveTo(Location dest) throws InvalidMoveException{
+    public void moveTo(Location dest) throws IllegalMoveException {
         if(canMoveTo(dest)){
             //Handle Capture
             if(isOtherPlayerPiece(dest)){
@@ -70,19 +70,17 @@ class Pawn extends GamePiece {
             this.loc.setLoc(dest);
         }
         else{
-            throw new InvalidMoveException("Pawn can not be moved to location");
+            throw new IllegalMoveException("Pawn can not be moved to location");
         }
     }
 }
 
 class Rook extends GamePiece {
-    private boolean isFirstMove;
 
     public Rook(ChessBoard board, Player player, Location loc){
         this.board = board;
         this.player = player;
         this.loc = loc;
-        isFirstMove = true;
     }
 
     @Override
@@ -95,4 +93,78 @@ class Rook extends GamePiece {
 
     }
 
+}
+
+class Knight extends GamePiece {
+
+    public Knight(ChessBoard board, Player player, Location loc){
+        this.board = board;
+        this.player = player;
+        this.loc = loc;
+    }
+
+    @Override
+    public boolean canMoveTo(Location dest){
+        return false;
+    }
+
+    @Override
+    void moveTo(Location dest) {
+
+    }
+}
+
+
+class Bishop extends GamePiece {
+    public Bishop(ChessBoard board, Player player, Location loc){
+        this.board = board;
+        this.player = player;
+        this.loc = loc;
+    }
+
+    @Override
+    public boolean canMoveTo(Location dest){
+        return false;
+    }
+
+    @Override
+    void moveTo(Location dest) {
+
+    }
+}
+
+class King extends GamePiece {
+    public King(ChessBoard board, Player player, Location loc){
+        this.board = board;
+        this.player = player;
+        this.loc = loc;
+    }
+
+    @Override
+    public boolean canMoveTo(Location dest){
+        return false;
+    }
+
+    @Override
+    void moveTo(Location dest) {
+
+    }
+}
+
+class Queen extends GamePiece {
+    public Queen(ChessBoard board, Player player, Location loc){
+        this.board = board;
+        this.player = player;
+        this.loc = loc;
+    }
+
+    @Override
+    public boolean canMoveTo(Location dest){
+        return false;
+    }
+
+    @Override
+    void moveTo(Location dest) {
+
+    }
 }

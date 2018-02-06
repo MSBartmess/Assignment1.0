@@ -1,14 +1,13 @@
 import java.util.ArrayList;
 
 public class Player {
-    private ChessBoard board;
-    private ArrayList<GamePiece> pieces;
-    private int playerDirectionModifier;
+    protected ChessBoard board;
+    protected ArrayList<GamePiece> pieces;
+    protected int playerDirectionModifier;
 
-    public Player(ChessBoard board, int playerDirection){
+    public Player(ChessBoard board){
         this.board = board;
         this.pieces = new ArrayList<>();
-        this.playerDirectionModifier = playerDirection;
     }
 
     public int getDirModifier(){
@@ -35,4 +34,8 @@ public class Player {
         pieces.add(piece);
     }
 
+    public void setUp(){
+
+    }
 }
+

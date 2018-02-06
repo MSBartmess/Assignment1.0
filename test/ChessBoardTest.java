@@ -12,15 +12,15 @@ public class ChessBoardTest {
         ChessBoard board = new ChessBoard();
         //assertThat(board.pieceAt(new Location(0,0)), isA(Rook.class));
         //assertThat(board.pieceAt(new Location(0,1)), isA(Pawn.class));
-        //assertThat(board.pieceAt(new Location(8,8)), isA(Rook.class));
-        //assertThat(board.pieceAt(new Location(8,7)), isA(Pawn.class));
+        //assertThat(board.pieceAt(new Location(7,7)), isA(Rook.class));
+        //assertThat(board.pieceAt(new Location(7,6)), isA(Pawn.class));
     }
 
 
     @Test
     public void canMovePieceAtLocToLocTest(){
         ChessBoard board = new ChessBoard();
-        assertTrue(board.canMovePiece(new Location(2,0), new Location(1,2)));
+        assertTrue(board.canMovePiece(new Location(1,0), new Location(0,2)));
     }
 
     @Test
@@ -34,7 +34,11 @@ public class ChessBoardTest {
     public void movePieceAtLocToLocTest(){
         ChessBoard board = new ChessBoard();
         GamePiece testPawn = board.pieceAt(new Location(0,1));
-        board.movePiece(new Location(0,1), new Location(0,2));
+        try {
+            board.movePiece(new Location(0,1), new Location(0,2));
+        } catch (IllegalMoveException e) {
+            fail("Move was declared illegal");
+        }
         assertEquals(testPawn, board.pieceAt(new Location(0,2)));
     }
 
@@ -42,7 +46,11 @@ public class ChessBoardTest {
     public void movePieceReferenceToLocTest(){
         ChessBoard board = new ChessBoard();
         GamePiece testPawn = board.pieceAt(new Location(0,1));
-        board.movePiece(testPawn, new Location(0,2));
+        try {
+            board.movePiece(testPawn, new Location(0,2));
+        } catch (IllegalMoveException e) {
+            fail("Move was declared illegal");
+        }
         assertEquals(testPawn, board.pieceAt(new Location(0,2)));
     }
 
@@ -55,15 +63,24 @@ public class ChessBoardTest {
     @Test
     public void getSecondCurrentPlayerTest(){
         ChessBoard board = new ChessBoard();
-        board.movePiece(new Location(0,1),new Location(0,2));
+        try {
+            board.movePiece(new Location(0,1),new Location(0,2));
+        } catch (IllegalMoveException e) {
+            fail("Move was declared illegal");
+        }
         assertEquals(1,board.getCurrentPlayerNum());
     }
 
     @Test
     public void currentPlayerLoopingTest(){
         ChessBoard board = new ChessBoard();
-        board.movePiece(new Location(0,1),new Location(0,2));
-        board.movePiece(new Location(7,7),new Location(7,6));
+        try {
+            board.movePiece(new Location(0,1),new Location(0,2));
+            board.movePiece(new Location(7,7),new Location(7,6));
+        } catch (IllegalMoveException e) {
+            fail("Move was declared illegal");
+        }
+
         assertEquals(0,board.getCurrentPlayerNum());
     }
 }

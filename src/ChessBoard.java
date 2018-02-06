@@ -5,20 +5,22 @@ public class ChessBoard {
     private ArrayList<Player> players;
     private int currentPlayer;
     static int X_RANGE_LOWER = 0;
-    static int X_RANGE_UPPER = 8;
+    static int X_RANGE_UPPER = 7;
     static int Y_RANGE_LOWER = 0;
-    static int Y_RANGE_UPPER = 8;
+    static int Y_RANGE_UPPER = 7;
     //Methods
     public ChessBoard(){
         this.players = new ArrayList<>();
-        this.players.add(new Player(this,1));
-        this.players.add(new Player(this,-1));
+        this.players.add(new WhitePlayer(this));
+        this.players.add(new BlackPlayer(this));
         this.currentPlayer = 0;
         setUp();
     }
 
     public void setUp(){
-
+        for(Player player : players){
+            player.setUp();
+        }
     }
 
     public void tearDown(){
@@ -37,23 +39,48 @@ public class ChessBoard {
         return players.get(playerNum);
     }
 
-    public void movePiece(Location pieceLoc, Location destLoc){
-
+    public void movePiece(Location pieceLoc, Location destLoc) throws IllegalMoveException{
+        GamePiece piece = pieceAt(pieceLoc);
+        if(piece == null){
+            throw new IllegalMoveException("No game piece at that location");
+        }
+        if(piece.getPlayer() == getCurrentPlayer()){
+            piece.moveTo(destLoc);
+        }
+        currentPlayer++;
+        currentPlayer %= players.size();
     }
 
-    public void movePiece(GamePiece piece, Location destLoc){
-
+    public void movePiece(GamePiece piece, Location destLoc) throws IllegalMoveException{
+        if(piece.getPlayer() == getCurrentPlayer()){
+            piece.moveTo(destLoc);
+        }
     }
 
     public boolean canMovePiece(Location pieceLoc, Location destLoc){
-        return true;
+        GamePiece piece = pieceAt(pieceLoc);
+        if(piece == null){
+            return false;
+        }
+        if(piece.getPlayer() == getCurrentPlayer()){
+            return piece.canMoveTo(destLoc);
+        }
+        return false;
     }
 
     public boolean canMovePiece(GamePiece piece, Location destLoc){
-        return true;
+        if(piece.getPlayer() == getCurrentPlayer()){
+            return piece.canMoveTo(destLoc);
+        }
+        return false;
     }
 
     public GamePiece pieceAt(Location pieceLoc){
+        for(Player player : players){
+            if(player.pieceAt(pieceLoc)!=null){
+                return player.pieceAt(pieceLoc);
+            }
+        }
         return null;
     }
 

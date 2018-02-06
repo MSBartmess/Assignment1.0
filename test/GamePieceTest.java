@@ -1,7 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
 public class GamePieceTest {
@@ -45,7 +44,7 @@ public class GamePieceTest {
         try {
             testPawn.moveTo(new Location(6, 3));
             assertEquals(testPawn, board.pieceAt(new Location(6, 3)));
-        } catch (InvalidMoveException e) {
+        } catch (IllegalMoveException e) {
             fail("Move was not declared valid");
         }
     }
@@ -56,7 +55,7 @@ public class GamePieceTest {
         try{
             testPawn.moveTo(new Location(4,4));
             assertEquals(testPawn, board.pieceAt(new Location(4,4)));
-        } catch (InvalidMoveException e) {
+        } catch (IllegalMoveException e) {
             fail("Move was not declared valid");
         }
     }
