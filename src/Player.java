@@ -14,7 +14,7 @@ public class Player {
     public int getDirModifier(){
         return  playerDirectionModifier;
     }
-
+    //Returns the peice of the player at the location
     public GamePiece pieceAt(Location loc){
         for(GamePiece piece : pieces){
             if(piece.isAt(loc)){
@@ -38,9 +38,7 @@ public class Player {
         return pieces;
     }
 
-    public void setUp(){
-
-    }
+    public void setUp(){}
     public void tearDown(){
         pieces.clear();
     }

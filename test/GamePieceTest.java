@@ -30,7 +30,7 @@ public class GamePieceTest {
         Pawn testPawn = new Pawn(board, player0, new Location(6,2));
         assertTrue(testPawn.canMoveTo(new Location(6,3)));
         assertFalse(testPawn.canMoveTo(new Location(7,3)));
-        ssertFalse(testPawn.canMoveTo(new Location(6,2)));
+        assertFalse(testPawn.canMoveTo(new Location(6,2)));
     }
     @Test
     public void pawnPlayer1CanMoveTest(){
@@ -49,6 +49,7 @@ public class GamePieceTest {
             fail("Move was not declared valid");
         }
     }
+
     @Test
     public void pawnPlayer1MoveTest(){
         Pawn testPawn = new Pawn(board, player1, new Location(4,5));
@@ -61,6 +62,10 @@ public class GamePieceTest {
         }
     }
 
+    @Test
+    public void pawnPlayerCanCaptureTest(){
+
+    }
     //Rook move tests
     @Test
     public void rookCanMoveTestFree(){
@@ -265,6 +270,7 @@ public class GamePieceTest {
         assertTrue(testKing.canMoveTo(new Location(5,3)));
         assertTrue(testKing.canMoveTo(new Location(3,5)));
         assertTrue(testKing.canMoveTo(new Location(3,3)));
+        assertFalse(testKing.canMoveTo(new Location(4,4)));
         assertFalse(testKing.canMoveTo(new Location(7,3)));
         assertFalse(testKing.canMoveTo(new Location(4,6)));
     }
@@ -324,6 +330,8 @@ public class GamePieceTest {
         assertTrue(testQueen.canMoveTo(new Location(2,2)));
         assertTrue(testQueen.canMoveTo(new Location(7,1)));
         assertTrue(testQueen.canMoveTo(new Location(2,6)));
+        assertTrue(testQueen.canMoveTo(new Location(4,6)));
+        assertTrue(testQueen.canMoveTo(new Location(6,4)));
         assertFalse(testQueen.canMoveTo(new Location(7,3)));
         assertFalse(testQueen.canMoveTo(new Location(5,6)));
     }
@@ -362,6 +370,19 @@ public class GamePieceTest {
             fail("Move was not declared valid");
         }
     }
+
+    @Test
+    public void queenInvalidMoveTest(){
+        Queen testQueen = new Queen(board, player1, new Location(4,4));
+        player0.addPiece(testQueen);
+        try{
+            testQueen.moveTo(new Location(10,7));
+            fail("Move should not have bee valid");
+        } catch (IllegalMoveException e) {
+            assertEquals(e.getMessage(), "Queen can not be moved to location");
+        }
+    }
+
 
     @Test
     public void queenMoveCaptureTest(){

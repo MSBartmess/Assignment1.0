@@ -10,10 +10,8 @@ public class ChessBoardTest {
     @Test
     public void setUpTest(){
         ChessBoard board = new ChessBoard();
-        //assertThat(board.pieceAt(new Location(0,0)), isA(Rook.class));
-        //assertThat(board.pieceAt(new Location(0,1)), isA(Pawn.class));
-        //assertThat(board.pieceAt(new Location(7,7)), isA(Rook.class));
-        //assertThat(board.pieceAt(new Location(7,6)), isA(Pawn.class));
+        assertEquals(16,board.getPlayer(0).getRemainingPiecesNum());
+        assertEquals(16,board.getPlayer(1).getRemainingPiecesNum());
     }
 
 
